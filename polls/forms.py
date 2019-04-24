@@ -6,7 +6,7 @@
 from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
-from polls.models import Poll
+from polls.models import Poll, Question
 
 
 class PollForm(forms.Form):
@@ -34,9 +34,13 @@ class PollForm(forms.Form):
         elif (not start and end):
             self.add_error('start_date', 'Please input start date.')
 
+class QuestionForm(forms.Form):
+    text = forms.CharField(widget=forms.Textarea)
+    type = forms.ChoiceField(choices=Question.TYPES, initial='01')
+
+
 class PollModelForm(forms.ModelForm):
-    title = forms.CharField(label='Poll title', max_length=100, required=True)
-    question_amount = forms.IntegerField(label='Question amount', min_value=1, max_value=10, required=True)
+
     class Meta:
         model = Poll
         exclude = ['del_flag']

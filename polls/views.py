@@ -9,10 +9,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db import connection
 from django.db.models import Count
+from django.forms import formset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
-from polls.forms import PollForm, CommentForm, PollModelForm
+from polls.forms import PollForm, CommentForm, PollModelForm, QuestionForm
 from polls.models import Poll, Question, Answer, Comment
 
 def index(request):
@@ -55,13 +56,24 @@ def detail(request, poll_id):
 @login_required
 @permission_required('polls.add_poll')
 def create(request):
-    ''' Poll application new poll creation page'''
+    QuestionFormSet = formset_factory(QuestionForm)
     if request.method == 'POST':
         form = PollModelForm(request.POST) #form = PollForm(request.POST)
+        formset = QuestionFormSet(request.POST)
         if form.is_valid():
-            form.save()
+            poll = form.save()
+            formset = QuestionFormSet(request.POST)
+            if formset.is_valid():
+                for question_form in formset:
+                    Question.objects.create(
+                        text=question_form.cleaned_date.get('text'),
+                        type=question_form.cleaned_date.get('type'),
+                        poll=poll,
+                    )
+
     else:
         form = PollModelForm()
+        formset = QuestionFormSet()
 
     context = {
         'form': form
@@ -143,16 +155,12 @@ def update(request, poll_id):
     poll = Poll.objects.get(id=poll_id)
     ''' Poll application new poll update page'''
     if request.method == 'POST':
-        form = PollModelForm(request.POST)
+        form = PollModelForm(request.POST, instance=poll)
         if form.is_valid():
             form.save()
     else:
         form = PollModelForm(instance=poll)
 
-    context = {
-        'form': form
-    }
-
     context = {'form': form, 'poll_obj': poll}
 
-    return render(request, template_name='polls/update.html', context=context)
+    return render(request, 'polls/update.html', context=context)
