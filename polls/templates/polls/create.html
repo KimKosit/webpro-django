@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Create New Poll</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Kanit:200,300,400" rel="stylesheet">
+  </head>
+  <body>
+    <div>
+      <h1 class="center">Create New Poll</h1>
+
+      <!--
+      {% if form.non_field_errors %}
+        <p> {{ form.non_field_errors }} </p>
+      {% endif %}
+      -->
+
+      <form class="container jumbotron" style="width: 600px;" method="POST" action="{% url 'create' %}">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <div class="group center">
+          <input class="btn btn-success" type="submit" value="Create">
+          <a href="{% url 'index' %}"><input class="btn btn-danger" type="button" value="Back"></a>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

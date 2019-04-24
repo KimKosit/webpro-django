@@ -1,0 +1,21 @@
+/*
+ * main.css
+ */
+
+body {
+    padding: 20px;
+    font-family: 'Kanit', sans-serif;
+}
+
+.poll-list {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.center {
+    text-align: center;
+}
+
+.group {
+    margin: 50px;
+}

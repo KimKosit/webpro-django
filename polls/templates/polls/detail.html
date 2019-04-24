@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Poll - {{ poll.title }}</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Kanit:200,300,400" rel="stylesheet">
+  </head>
+  <body>
+    <div>
+      <div>
+        <h1>{{ poll.title }}</h1>
+        <h2>Question List</h2>
+      </div>
+      <br>
+
+      <div class="jumbotron">
+
+        <form method="POST" action="{% url 'detail' poll_id=poll.id %}">
+          {% csrf_token %}
+
+          {% for question in poll.question_set.all %}
+            <div class="form-group">
+              {{ question.text }}
+
+              {% for choice in question.choice_set.all %}
+                <br>
+                <input type="radio"
+                       name="question_{{question.id}}"
+                       value="{{choice.id}}"
+                       {% if choice.answer %} checked="checked" {% endif %}>
+                {{ choice.text }}
+              {% endfor %}
+            </div>
+          {% endfor %}
+
+          <div>
+            <a href="{% url 'comment' poll_id=poll.id %}" target="_blank" ><input class="btn btn-warning" type="button" value="Comment"></a>
+            <input class="btn btn-success" type="submit" value="Save">
+            <a href="{% url 'index' %}"><input class="btn btn-danger" type="button" value="Back"></a>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

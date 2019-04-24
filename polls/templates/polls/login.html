@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Login</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Kanit:200,300,400" rel="stylesheet">
+  </head>
+  <body>
+    <div>
+      <h1 class="center">Login</h1>
+
+      {% if error %}
+        <div class="alert alert-danger container center" style="width: 600px;">
+          {{ error }}
+        </div>
+      {% endif %}
+
+      <div class="container" style="width: 600px;">
+        <form method="POST" action="{% url 'login' %}">
+          {% csrf_token %}
+
+          <label>Username</label>
+          <input class="form-control" type="text" name="username">
+          <br>
+          <label>Password</label>
+          <input class="form-control" type="password" name="password">
+
+          <input type="hidden" name="next_url" value="{{ next_url }}">
+
+          <div class="center group">
+            <input class="btn btn-success" type="submit" value="LOGIN">
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

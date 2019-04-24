@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Comment</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Kanit:200,300,400" rel="stylesheet">
+  </head>
+  <body>
+    <div>
+      <div class="center group">
+        <h1>New Comment</h1>
+        <h3 class="text-muted">{{ poll.title }}</h3>
+      </div>
+
+      <div class="container jumbotron">
+      <ul>
+          <li style="color: red">Please input Email or Phone No. or both.</li>
+      </ul>
+        <form method="POST" action="{% url 'comment' poll_id=poll.id %}">
+          {% csrf_token %}
+
+            {% for hidden_field in form.hidden_fields %}
+                {{ hidden_field }}
+            {% endfor %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+                </div>
+            {% endif %}
+
+            {{ form.as_p }}
+
+          <div class="center group">
+            <input class="btn btn-success" type="submit" value="Submit">
+            <a href="{% url 'detail' poll_id=poll.id %}"><input class="btn btn-danger" type="button" value="Back"></a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

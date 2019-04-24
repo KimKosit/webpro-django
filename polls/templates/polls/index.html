@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content=ss"width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Polls</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Kanit:200,300,400" rel="stylesheet">
+  </head>
+  <body>
+    <div>
+      <div class="center">
+        <h1>{{ page_title }}</h1>
+        <h2>Popular polls</h2>
+      </div>
+
+      <div class="container poll-list">
+        <table class="table">
+        {% for poll in poll_list %}
+        <tr>
+          <td>
+            {{ poll.id }} - {{ poll.title }}
+            <p class="text-muted">(จำนวนคำถาม: {{ poll.question_count }})</p>
+          </td>
+          {% if user.is_authenticated %}
+          <td>
+            <a href="{% url 'detail' poll_id=poll.id %}">
+              <button class="btn btn-primary">
+                Vote
+              </button>
+            </a>
+          </td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </table>
+      </div>
+
+      <div class="container center">
+        <!-- Create New Poll -->
+        {% if perms.polls.add_poll %}
+          <a href="{% url 'create' %}" target="_blank"><button class="btn btn-success">Add Poll</button></a>
+        {% endif %}
+
+        <!-- Login/Logout Button -->
+        {% if not user.is_authenticated %}
+          <a href="{% url 'login' %}"><button class="btn btn-success">Login</button></a>
+        {% else %}
+          <a href="{% url 'logout' %}"><button class="btn btn-danger">Logout</button></a>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>
